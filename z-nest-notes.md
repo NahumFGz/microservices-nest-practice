@@ -23,6 +23,10 @@
   npm i -D @types/streamifier
   npm i -D @types/multer
 
+- Universal Unique Id
+  npm i uuid
+  npm install -D @types/uuid
+
 ## Comandos de NestJs CLI
 
 - Para crear un proyecto
