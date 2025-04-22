@@ -30,6 +30,9 @@
 - Variables de entorno
   npm i dotenv
 
+- Validador de esquemas
+  npm install joi
+
 ## Comandos de NestJs CLI
 
 - Para crear un proyecto
