@@ -25,7 +25,10 @@
 
 - Universal Unique Id
   npm i uuid
-  npm install -D @types/uuid
+  npm i -D @types/uuid
+
+- Variables de entorno
+  npm i dotenv
 
 ## Comandos de NestJs CLI
 
