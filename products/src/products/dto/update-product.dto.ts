@@ -1,5 +1,10 @@
 import { PartialType } from '@nestjs/mapped-types'
 import { CreateProductDto } from './create-product.dto'
+import { IsOptional, IsString, IsUUID } from 'class-validator'
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-call
-export class UpdateProductDto extends PartialType(CreateProductDto) {}
+export class UpdateProductDto extends PartialType(CreateProductDto) {
+  @IsString()
+  @IsUUID()
+  @IsOptional()
+  id?: string
+}

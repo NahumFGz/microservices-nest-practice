@@ -1,3 +1,9 @@
+interface UpdateWithOptions {
+  name?: string
+  description?: string
+  price?: number
+}
+
 export class Product {
   //! Forma 1
   //   public id: string
@@ -14,4 +20,9 @@ export class Product {
   ) {}
 
   //TODO: updateWith
+  updateWith({ name, description, price }: UpdateWithOptions) {
+    this.name = name ?? this.name
+    this.description = description ?? this.description
+    this.price = price ?? this.price
+  }
 }

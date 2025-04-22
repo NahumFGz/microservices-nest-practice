@@ -23,6 +23,7 @@ export class ProductsService {
 
   findOne(id: string): Product {
     const product = this.products.find((product) => product.id === id)
+    console.log('lalalal', id)
 
     if (!product) {
       throw new NotFoundException(`Product with id ${id} not found`)
@@ -32,7 +33,11 @@ export class ProductsService {
   }
 
   update(id: string, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`
+    const { id: _, name, description, price } = updateProductDto
+    const product = this.findOne(id)
+    product.updateWith({ name, description, price })
+
+    return product
   }
 
   remove(id: string): Product {
