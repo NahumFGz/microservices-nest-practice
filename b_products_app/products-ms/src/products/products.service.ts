@@ -24,13 +24,14 @@ export class ProductsService extends PrismaClient implements OnModuleInit {
 
   async findAll(paginationDto: PaginationDto) {
     const { page = 1, limit = 10 } = paginationDto
-    const totalPages = await this.product.count()
+    const totalPages = await this.product.count({ where: { available: true } })
     const lastPage = Math.ceil(totalPages / limit)
 
     return {
       data: await this.product.findMany({
         skip: (page - 1) * limit,
         take: limit,
+        where: { available: true },
       }),
       metadata: {
         total: totalPages,
@@ -41,7 +42,9 @@ export class ProductsService extends PrismaClient implements OnModuleInit {
   }
 
   async findOne(id: number) {
-    const product = await this.product.findFirst({ where: { id: id } })
+    const product = await this.product.findFirst({
+      where: { id: id, available: true },
+    })
 
     if (!product) {
       throw new NotFoundException(`Product whith id #${id} not found`)
@@ -62,8 +65,17 @@ export class ProductsService extends PrismaClient implements OnModuleInit {
   async remove(id: number) {
     await this.findOne(id)
 
-    return this.product.delete({
+    // return this.product.delete({
+    //   where: { id: id },
+    // })
+
+    const product = await this.product.update({
       where: { id: id },
+      data: {
+        available: false,
+      },
     })
+
+    return product
   }
 }

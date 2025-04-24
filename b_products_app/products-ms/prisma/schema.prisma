@@ -19,6 +19,10 @@ model Product {
   name  String
   price Float
 
+  available Boolean @default(true) //Borrado lógico
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([available])
 }
