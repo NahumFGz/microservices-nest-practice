@@ -56,3 +56,13 @@
 
 - Generar pipes
   nest g pi nombre-pipe path(common/pipes)
+
+# PrismaOrm -> https://docs.nestjs.com/recipes/prisma
+
+- Instalación e inicialización
+  npm install -D prisma
+  npx prisma init
+
+- Crear migración e instalar cliente de prisma
+  npx prisma migrate dev --name init
+  npm install @prisma/client
