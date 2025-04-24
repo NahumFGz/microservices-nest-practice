@@ -52,6 +52,7 @@
 
 - Generar recursos
   nest g res categories
+  nest g res products --no-spec
 
 - Generar pipes
   nest g pi nombre-pipe path(common/pipes)
