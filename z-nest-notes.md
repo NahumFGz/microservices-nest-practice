@@ -66,3 +66,8 @@
 - Crear migración e instalar cliente de prisma
   npx prisma migrate dev --name init
   npm install @prisma/client
+
+# Configuración de microservicios -> https://docs.nestjs.com/microservices/basics
+
+- Instalaer nest microservices
+  npm i --save @nestjs/microservices
