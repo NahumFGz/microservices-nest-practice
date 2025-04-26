@@ -72,6 +72,8 @@
 - Instalaer nest microservices
   npm i --save @nestjs/microservices
 
+- Inyeccion del token en el cliente
+
 # Nota
 
 - Para agregar endpoints al gateway usar `nest g res <NOMBRE>` luego N en la generación por que no es necesario crear todo xq no será una api rest completa
