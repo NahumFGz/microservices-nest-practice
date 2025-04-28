@@ -77,3 +77,5 @@
 # Nota
 
 - Para agregar endpoints al gateway usar `nest g res <NOMBRE>` luego N en la generación por que no es necesario crear todo xq no será una api rest completa
+
+- Documentación de excepciones en los microservicios -> https://docs.nestjs.com/microservices/exception-filters

@@ -11,7 +11,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common'
-import { ClientProxy } from '@nestjs/microservices'
+import { ClientProxy, RpcException } from '@nestjs/microservices'
 import { firstValueFrom } from 'rxjs'
 import { PaginationDto } from 'src/common'
 import { PRODUCT_SERVICE } from 'src/config'
@@ -43,7 +43,8 @@ export class ProductsController {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return product
     } catch (error) {
-      throw new BadRequestException(error)
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      throw new RpcException(error)
     }
   }
 
