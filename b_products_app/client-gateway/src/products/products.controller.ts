@@ -11,11 +11,16 @@ import {
   Query,
 } from '@nestjs/common'
 import { ClientProxy, RpcException } from '@nestjs/microservices'
-import { catchError, firstValueFrom } from 'rxjs'
+import { catchError } from 'rxjs'
 import { PaginationDto } from 'src/common'
 import { PRODUCT_SERVICE } from 'src/config'
 import { CreateProductDto } from './dto/create-product.dto'
 import { UpdateProductDto } from './dto/update-product.dto'
+
+type RpcError = {
+  status: number
+  message: string
+}
 
 @Controller('products')
 export class ProductsController {
@@ -34,25 +39,18 @@ export class ProductsController {
   }
 
   @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number) {
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const product = await firstValueFrom(
-        this.productsClient.send({ cmd: 'find_one_product' }, { id }),
-      )
-
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return product
-    } catch (error) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      throw new RpcException(error)
-    }
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.productsClient.send({ cmd: 'find_one_product' }, { id }).pipe(
+      catchError((err: RpcError) => {
+        throw new RpcException(err)
+      }),
+    )
   }
 
   @Delete(':id')
   deleteProduct(@Param('id') id: string) {
     return this.productsClient.send({ cmd: 'delete_product' }, { id }).pipe(
-      catchError((err: { status: number; message: string }) => {
+      catchError((err: RpcError) => {
         throw new RpcException(err)
       }),
     )
@@ -66,7 +64,7 @@ export class ProductsController {
     return this.productsClient
       .send({ cmd: 'update_product' }, { id, ...updateProductDto })
       .pipe(
-        catchError((err: { status: number; message: string }) => {
+        catchError((err: RpcError) => {
           throw new RpcException(err)
         }),
       )
