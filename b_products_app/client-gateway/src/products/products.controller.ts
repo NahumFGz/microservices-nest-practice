@@ -11,7 +11,7 @@ import {
   Query,
 } from '@nestjs/common'
 import { ClientProxy, RpcException } from '@nestjs/microservices'
-import { firstValueFrom } from 'rxjs'
+import { catchError, firstValueFrom } from 'rxjs'
 import { PaginationDto } from 'src/common'
 import { PRODUCT_SERVICE } from 'src/config'
 import { CreateProductDto } from './dto/create-product.dto'
@@ -59,6 +59,12 @@ export class ProductsController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateProductDto: UpdateProductDto,
   ) {
-    return this.productsClient.send({ cmd: 'update_product' }, updateProductDto)
+    return this.productsClient
+      .send({ cmd: 'update_product' }, { id, ...updateProductDto })
+      .pipe(
+        catchError((err: { status: number; message: string }) => {
+          throw new RpcException(err)
+        }),
+      )
   }
 }
