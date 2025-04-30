@@ -19,7 +19,7 @@ export class OrdersService extends PrismaClient implements OnModuleInit {
   }
 
   findAll() {
-    return `This action returns all orders`
+    return this.order.findMany()
   }
 
   async findOne(id: string) {
