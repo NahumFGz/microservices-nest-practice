@@ -10,9 +10,9 @@ async function bootstrap() {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
     AppModule,
     {
-      transport: Transport.TCP,
+      transport: Transport.NATS,
       options: {
-        port: envs.port,
+        servers: envs.natsServers,
       },
     },
   )
@@ -26,6 +26,7 @@ async function bootstrap() {
 
   await app.listen()
   logger.log(`Products Microservice running on port ${envs.port}`)
+  logger.log(`Nats runing on: ${envs.natsServers.join(',')}`)
 }
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
