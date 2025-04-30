@@ -8,7 +8,7 @@ export class OrdersService extends PrismaClient implements OnModuleInit {
 
   async onModuleInit() {
     await this.$connect()
-    this.logger.log('Database conected')
+    this.logger.log('Orders Database conected')
   }
 
   create(createOrderDto: CreateOrderDto) {
