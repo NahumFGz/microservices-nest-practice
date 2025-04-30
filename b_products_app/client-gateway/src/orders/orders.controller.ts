@@ -1,22 +1,26 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common'
+import { Controller, Get, Post, Body, Param, Inject } from '@nestjs/common'
 import { CreateOrderDto } from './dto/create-order.dto'
+import { ORDERS_SERVICE } from 'src/config'
+import { ClientProxy } from '@nestjs/microservices'
 
 @Controller('orders')
 export class OrdersController {
-  constructor() {}
+  constructor(
+    @Inject(ORDERS_SERVICE) private readonly ordersClient: ClientProxy,
+  ) {}
 
   @Post()
-  create(@Body() createOrderDto: CreateOrderDto) {
-    return this.ordersService.create(createOrderDto)
+  create(@Body() _createOrderDto: CreateOrderDto) {
+    return this.ordersClient.send('createOrder', {})
   }
 
   @Get()
   findAll() {
-    return this.ordersService.findAll()
+    return this.ordersClient.send('findAllOrders', {})
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.ordersService.findOne(+id)
+    return this.ordersClient.send('findOneOrder', { id: id })
   }
 }
