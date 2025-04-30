@@ -10,6 +10,7 @@ import { PrismaClient } from '@prisma/client'
 import { ClientProxy, RpcException } from '@nestjs/microservices'
 import { ChangeOrderStatusDto, OrderPaginationDto } from './dto'
 import { PRODUCT_SERVICE } from 'src/config/services'
+import { firstValueFrom } from 'rxjs'
 
 @Injectable()
 export class OrdersService extends PrismaClient implements OnModuleInit {
@@ -26,15 +27,20 @@ export class OrdersService extends PrismaClient implements OnModuleInit {
     this.logger.log('Orders Database conected')
   }
 
-  create(createOrderDto: CreateOrderDto) {
+  async create(createOrderDto: CreateOrderDto) {
     // return this.order.create({
     //   data: createOrderDto,
     // })
 
-    return {
-      service: 'Orders Microservice',
-      createOrderDto: createOrderDto,
-    }
+    const ids = [5, 600]
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const products = await firstValueFrom(
+      this.productsClient.send({ cmd: 'validate_products' }, ids),
+    )
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return products
   }
 
   async findAll(orderPaginationDto: OrderPaginationDto) {
