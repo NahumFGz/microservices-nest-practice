@@ -80,6 +80,10 @@
 
 - Documentación de excepciones en los microservicios -> https://docs.nestjs.com/microservices/exception-filters
 
-# Ejecutar docker en detach
+# Comandos de Docker
 
-- docker compose up -d
+- PostgreSQL
+  docker compose up -d
+
+- NATS -> https://hub.docker.com/_/nats
+  docker run -d --name nats-server -p 4222:4222 -p 6222:6222 -p 8222:8222 nats
