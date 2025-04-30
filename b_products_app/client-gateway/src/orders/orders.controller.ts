@@ -1,7 +1,8 @@
 import { Controller, Get, Post, Body, Param, Inject } from '@nestjs/common'
-import { CreateOrderDto } from './dto/create-order.dto'
+
 import { ORDERS_SERVICE } from 'src/config'
 import { ClientProxy } from '@nestjs/microservices'
+import { CreateOrderDto } from './dto'
 
 @Controller('orders')
 export class OrdersController {
@@ -10,8 +11,8 @@ export class OrdersController {
   ) {}
 
   @Post()
-  create(@Body() _createOrderDto: CreateOrderDto) {
-    return this.ordersClient.send('createOrder', {})
+  create(@Body() createOrderDto: CreateOrderDto) {
+    return this.ordersClient.send('createOrder', { createOrderDto })
   }
 
   @Get()
