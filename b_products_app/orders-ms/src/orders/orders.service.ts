@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 import {
   HttpStatus,
   Inject,
@@ -28,19 +31,71 @@ export class OrdersService extends PrismaClient implements OnModuleInit {
   }
 
   async create(createOrderDto: CreateOrderDto) {
-    // return this.order.create({
-    //   data: createOrderDto,
-    // })
+    try {
+      const productIds = createOrderDto.items.map((item) => item.productId)
 
-    const ids = [5, 600]
+      //! 1. Confirmar id de los productos
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const products = await firstValueFrom(
-      this.productsClient.send({ cmd: 'validate_products' }, ids),
-    )
+      const products: any[] = await firstValueFrom(
+        this.productsClient.send({ cmd: 'validate_products' }, productIds),
+      )
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return products
+      //! 2. Calculos de los valores
+      const totalAmount = createOrderDto.items.reduce((acc, orderItem) => {
+        const price = products.find(
+          (product) => product.id === orderItem.productId,
+        ).price
+        return price * orderItem.quantity
+      }, 0)
+
+      const totalItems = createOrderDto.items.reduce((acc, orderItem) => {
+        return acc + orderItem.quantity
+      }, 0)
+
+      //! 3. Crear una transacción de base de datos
+      const order = await this.order.create({
+        data: {
+          totalAmount: totalAmount,
+          totalItems: totalItems,
+          OrderItem: {
+            createMany: {
+              data: createOrderDto.items.map((orderItem) => ({
+                price: products.find(
+                  (product) => product.id === orderItem.productId,
+                ).price,
+                productId: orderItem.productId,
+                quantity: orderItem.quantity,
+              })),
+            },
+          },
+        },
+        include: {
+          OrderItem: {
+            select: {
+              price: true,
+              quantity: true,
+              productId: true,
+            },
+          },
+        },
+      })
+
+      //! 4. Se agrega el product name al item
+      return {
+        ...order,
+        OrderItem: order.OrderItem.map((orderItem) => ({
+          ...orderItem,
+          name: products.find((product) => product.id === orderItem.productId)
+            .name,
+        })),
+      }
+    } catch (error) {
+      this.logger.error('Error creating order', error)
+      throw new RpcException({
+        status: HttpStatus.BAD_REQUEST,
+        message: 'Error creating order',
+      })
+    }
   }
 
   async findAll(orderPaginationDto: OrderPaginationDto) {
