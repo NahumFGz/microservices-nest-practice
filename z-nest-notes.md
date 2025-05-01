@@ -92,3 +92,8 @@
 
 - NATS -> https://hub.docker.com/_/nats
   docker run -d --name nats-server -p 4222:4222 -p 6222:6222 -p 8222:8222 nats
+
+# NOTAS:
+
+- Al dockerizar SQLite en local la carpeta de migrations debe existir -> npx prisma migrate dev --name
+- No olvidar insertar datos xq la copia de dev.db es la q aparece en los requests

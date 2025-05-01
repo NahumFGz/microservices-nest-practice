@@ -7,3 +7,6 @@ CREATE TABLE "Product" (
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL
 );
+
+-- CreateIndex
+CREATE INDEX "Product_available_idx" ON "Product"("available");
