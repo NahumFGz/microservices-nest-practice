@@ -1,5 +1,5 @@
 import { Controller, ParseUUIDPipe } from '@nestjs/common'
-import { MessagePattern, Payload } from '@nestjs/microservices'
+import { EventPattern, MessagePattern, Payload } from '@nestjs/microservices'
 import { OrdersService } from './orders.service'
 import { ChangeOrderStatusDto, CreateOrderDto, OrderPaginationDto } from './dto'
 
@@ -33,5 +33,13 @@ export class OrdersController {
   @MessagePattern('changeOrderStatus')
   changeOrderStatus(@Payload() changeOrderStatusDto: ChangeOrderStatusDto) {
     return this.ordersService.changeStatus(changeOrderStatusDto)
+  }
+
+  @EventPattern('payment.succeeded')
+  paidOrder(@Payload() paidOrderDto: any) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    console.log({ paidOrderDto })
+
+    return
   }
 }
