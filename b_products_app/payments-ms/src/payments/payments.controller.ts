@@ -1,7 +1,34 @@
-import { Controller } from '@nestjs/common';
-import { PaymentsService } from './payments.service';
+import { Controller, Get, Post } from '@nestjs/common'
+import { PaymentsService } from './payments.service'
 
 @Controller('payments')
 export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}
+
+  @Post('create-payment-session')
+  createPaymentSession() {
+    return 'createPaymentSession'
+  }
+
+  @Get('success')
+  success() {
+    return {
+      ok: true,
+      message: 'Payment successful',
+    }
+  }
+
+  @Get('cancel')
+  cancel() {
+    return {
+      ok: true,
+      message: 'Payment cancelled',
+    }
+  }
+
+  @Post('webhook')
+  // eslint-disable-next-line @typescript-eslint/require-await
+  async stripeWebhook() {
+    return 'stripeWebhook'
+  }
 }
