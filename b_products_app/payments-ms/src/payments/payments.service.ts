@@ -35,8 +35,8 @@ export class PaymentsService {
       //* Colocar los items que se está comprando
       line_items: lineItems,
       mode: 'payment',
-      success_url: 'http://localhost:3003/payments/success',
-      cancel_url: 'http://localhost:3003/payments/cancel',
+      success_url: envs.stripeSuccessUrl,
+      cancel_url: envs.stripeCancelUrl,
     })
 
     return session
@@ -51,7 +51,7 @@ export class PaymentsService {
     }
 
     let event: Stripe.Event
-    const endpointSecret = envs.stripeWebHookSecret
+    const endpointSecret = envs.stripeEndpointSecret
 
     try {
       event = this.stripe.webhooks.constructEvent(
