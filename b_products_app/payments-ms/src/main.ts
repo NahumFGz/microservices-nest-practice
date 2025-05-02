@@ -18,12 +18,16 @@ async function bootstrap() {
     }),
   )
 
-  app.connectMicroservice<MicroserviceOptions>({
-    transport: Transport.NATS,
-    options: {
-      servers: envs.natsServers,
+  app.connectMicroservice<MicroserviceOptions>(
+    {
+      transport: Transport.NATS,
+      options: {
+        servers: envs.natsServers,
+      },
     },
-  })
+    //Para obligar al post y al Pattern para q se pueda validar con el DTO
+    { inheritAppConfig: true },
+  )
 
   await app.startAllMicroservices()
 
