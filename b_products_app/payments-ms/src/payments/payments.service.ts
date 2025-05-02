@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { envs } from 'src/config'
 import Stripe from 'stripe'
 import { PaymentSessionDto } from './dto/payment-session.dto'
+import { Request, Response } from 'express'
 
 @Injectable()
 export class PaymentsService {
@@ -37,5 +38,13 @@ export class PaymentsService {
     })
 
     return session
+  }
+
+  // eslint-disable-next-line @typescript-eslint/require-await
+  async stripeWebhook(req: Request, res: Response) {
+    const sig = req.headers['stripe-signature']
+
+    console.log({ sig })
+    return res.status(200).json({ sig })
   }
 }
