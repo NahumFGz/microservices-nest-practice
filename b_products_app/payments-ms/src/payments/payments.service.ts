@@ -44,7 +44,28 @@ export class PaymentsService {
   async stripeWebhook(req: Request, res: Response) {
     const sig = req.headers['stripe-signature']
 
-    console.log({ sig })
+    if (!sig) {
+      return res.status(400).send('Missing Stripe signature')
+    }
+
+    let event: Stripe.Event
+    const endpointSecret = envs.stripeWebHookSecret
+
+    try {
+      event = this.stripe.webhooks.constructEvent(
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        req['rawBody'],
+        sig,
+        endpointSecret,
+      )
+    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      console.error('Webhook signature verification failed.', error.message)
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      return res.status(400).send(`Webhook Error: ${error.message}`)
+    }
+
+    console.log({ event })
     return res.status(200).json({ sig })
   }
 }
