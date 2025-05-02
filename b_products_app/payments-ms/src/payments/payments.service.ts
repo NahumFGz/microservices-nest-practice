@@ -39,7 +39,12 @@ export class PaymentsService {
       cancel_url: envs.stripeCancelUrl,
     })
 
-    return session
+    // return session
+    return {
+      cancelUrl: session.cancel_url,
+      successUrl: session.success_url,
+      url: session.url,
+    }
   }
 
   // eslint-disable-next-line @typescript-eslint/require-await
