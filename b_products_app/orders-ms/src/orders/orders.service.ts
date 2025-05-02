@@ -14,6 +14,7 @@ import { ClientProxy, RpcException } from '@nestjs/microservices'
 import { ChangeOrderStatusDto, OrderPaginationDto } from './dto'
 import { NATS_SERVICE } from 'src/config/services'
 import { firstValueFrom } from 'rxjs'
+import { OrderWithProducts } from './interfaces/order-with-products.interface'
 
 @Injectable()
 export class OrdersService extends PrismaClient implements OnModuleInit {
@@ -171,5 +172,17 @@ export class OrdersService extends PrismaClient implements OnModuleInit {
         status: status,
       },
     })
+  }
+
+  async createPaymentSession(order: OrderWithProducts) {
+    const paymentSession = await firstValueFrom(
+      this.client.send('create.payment.session', {
+        abc: 123,
+        xyz: 'sdasdasdasdadas',
+      }),
+    )
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return paymentSession
   }
 }
