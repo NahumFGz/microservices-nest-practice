@@ -39,8 +39,19 @@ export class OrdersController {
   }
 
   @Get()
-  findAll(@Query() orderPaginationDto: OrderPaginationDto) {
-    return this.client.send('findAllOrders', orderPaginationDto)
+  async findAll(@Query() orderPaginationDto: OrderPaginationDto) {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const orders = await firstValueFrom(
+        this.client.send('findAllOrders', orderPaginationDto),
+      )
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return orders
+    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      throw new RpcException(error)
+    }
   }
 
   @Get('id/:id')
