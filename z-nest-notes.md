@@ -101,6 +101,13 @@
   stripe listen --forward-to localhost:3003/payments/webhook
   stripe trigger payment_intent.succeeded -> para probar la llamada al webhook
 
+# Pruebas de Hookdeck
+
+- Comandos y web -> https://dashboard.hookdeck.com/connections
+  hookdeck login
+  hookdeck listen 3003 stripe-to-localhost
+  luego con esto puedo crear el webhook deste stripe con la url q proporciona
+
 # NOTAS:
 
 - Al dockerizar SQLite en local la carpeta de migrations debe existir -> npx prisma migrate dev --name
