@@ -93,6 +93,14 @@
 - NATS -> https://hub.docker.com/_/nats
   docker run -d --name nats-server -p 4222:4222 -p 6222:6222 -p 8222:8222 nats
 
+# Pruebas de Stripe
+
+- Comandos
+  stripe login
+  stripe listen --forward-to <URL_DEL_WEBHOOK>
+  stripe listen --forward-to localhost:3003/payments/webhook
+  stripe trigger payment_intent.succeeded -> para probar la llamada al webhook
+
 # NOTAS:
 
 - Al dockerizar SQLite en local la carpeta de migrations debe existir -> npx prisma migrate dev --name

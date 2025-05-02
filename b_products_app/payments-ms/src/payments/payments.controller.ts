@@ -30,6 +30,7 @@ export class PaymentsController {
   @Post('webhook')
   // eslint-disable-next-line @typescript-eslint/require-await
   async stripeWebhook() {
+    console.log('StrypeWebhookCalled')
     return 'stripeWebhook'
   }
 }
