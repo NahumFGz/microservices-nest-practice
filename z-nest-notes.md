@@ -108,6 +108,15 @@
   hookdeck listen 3003 stripe-to-localhost
   luego con esto puedo crear el webhook deste stripe con la url q proporciona
 
+# Prisma y mongo
+
+- Comandos y notas
+  Documentación de prisma y mongo -> https://www.prisma.io/docs/orm/overview/databases/mongodb
+
+  no necesita migración xq se pueden guardar objetos, pero si necesita generar el cliente de prisma
+
+  npx prisma generate
+
 # NOTAS:
 
 - Al dockerizar SQLite en local la carpeta de migrations debe existir -> npx prisma migrate dev --name
