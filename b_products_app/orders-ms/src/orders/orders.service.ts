@@ -11,7 +11,7 @@ import {
 import { CreateOrderDto } from './dto/create-order.dto'
 import { PrismaClient } from '@prisma/client'
 import { ClientProxy, RpcException } from '@nestjs/microservices'
-import { ChangeOrderStatusDto, OrderPaginationDto } from './dto'
+import { ChangeOrderStatusDto, OrderPaginationDto, PaidOrderDto } from './dto'
 import { NATS_SERVICE } from 'src/config/services'
 import { firstValueFrom } from 'rxjs'
 import { OrderWithProducts } from './interfaces/order-with-products.interface'
@@ -189,5 +189,30 @@ export class OrdersService extends PrismaClient implements OnModuleInit {
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return paymentSession
+  }
+
+  async paidOrder(paidOrderDto: PaidOrderDto) {
+    this.logger.log('Paid order')
+    this.logger.log(paidOrderDto)
+
+    const order = await this.order.update({
+      where: { id: paidOrderDto.orderId },
+      data: {
+        status: 'PAID',
+        paid: true,
+        paidAt: new Date(),
+        stripeChargeId: paidOrderDto.stripePaymentId,
+
+        //! Aprovechar la relación o usar transaction -> this.$transaction
+        OrderReceipt: {
+          create: {
+            receiptUrl: paidOrderDto.receiptUrl,
+          },
+        },
+      },
+    })
+
+    //! No importa el return xq es un event patern, despues del emit no esperará un response
+    return order
   }
 }
