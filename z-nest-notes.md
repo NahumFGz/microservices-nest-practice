@@ -124,3 +124,4 @@
 
 - Al dockerizar SQLite en local la carpeta de migrations debe existir -> npx prisma migrate dev --name
 - No olvidar insertar datos xq la copia de dev.db es la q aparece en los requests
+- En el pdf están los links de la documentacipon de los decoradores personalizados
