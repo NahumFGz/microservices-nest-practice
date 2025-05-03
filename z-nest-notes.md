@@ -33,6 +33,9 @@
 - Validador de esquemas
   npm install joi
 
+- Jwt -> https://docs.nestjs.com/security/authentication
+  npm install --save @nestjs/jwt
+
 ## Comandos de NestJs CLI
 
 - Para crear un proyecto
