@@ -20,7 +20,12 @@ export class AuthController {
 
   @Post('login')
   loginUser(@Body() loginUserDto: LoginUserDto) {
-    return this.client.send('auth.login.user', loginUserDto)
+    return this.client.send('auth.login.user', loginUserDto).pipe(
+      catchError((error) => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        throw new RpcException(error)
+      }),
+    )
   }
 
   @Get('verify')
