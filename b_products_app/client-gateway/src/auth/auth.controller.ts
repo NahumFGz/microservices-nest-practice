@@ -1,15 +1,23 @@
-import { Controller, Get, Post } from '@nestjs/common'
+import { Controller, Get, Inject, Post } from '@nestjs/common'
+import { ClientProxy } from '@nestjs/microservices'
+import { NATS_SERVICE } from 'src/config'
 
 @Controller('auth')
 export class AuthController {
-  constructor() {}
+  constructor(@Inject(NATS_SERVICE) private readonly client: ClientProxy) {}
 
   @Post('register')
-  registerUser() {}
+  registerUser() {
+    return this.client.send('auth.register.user', {})
+  }
 
   @Post('login')
-  loginUser() {}
+  loginUser() {
+    return this.client.send('auth.login.user', {})
+  }
 
   @Get('verify')
-  verifyUser() {}
+  verifyUser() {
+    return this.client.send('auth.verify.user', {})
+  }
 }
