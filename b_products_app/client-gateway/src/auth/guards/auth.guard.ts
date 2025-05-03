@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/require-await */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   CanActivate,
   ExecutionContext,
@@ -15,6 +14,8 @@ import { NATS_SERVICE } from 'src/config'
 
 @Injectable()
 export class AuthGuard implements CanActivate {
+  constructor(@Inject(NATS_SERVICE) private readonly client: ClientProxy) {}
+
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request: Request = context.switchToHttp().getRequest()
     const token = this.extractTokenFromHeader(request)
@@ -22,13 +23,12 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException('Token not found')
     }
     try {
-      request['user'] = {
-        id: 1,
-        name: 'juan',
-        email: 'juan@google.com',
-      }
+      const { user, token: newToken } = await firstValueFrom(
+        this.client.send('auth.verify.user', token),
+      )
 
-      request['token'] = token
+      request['user'] = user
+      request['token'] = newToken
     } catch {
       throw new UnauthorizedException()
     }
