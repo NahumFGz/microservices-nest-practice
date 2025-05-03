@@ -3,7 +3,6 @@ import { ClientProxy, RpcException } from '@nestjs/microservices'
 import { NATS_SERVICE } from 'src/config'
 import { LoginUserDto, RegisterUserDto } from './dto'
 import { catchError } from 'rxjs'
-import { error } from 'console'
 
 @Controller('auth')
 export class AuthController {
